@@ -8,8 +8,4 @@ export default [
     path: "upload",
     component: <UploadBulletin />,
   },
-  {
-    path: "show",
-    component: <ShowBulletin />,
-  },
 ];

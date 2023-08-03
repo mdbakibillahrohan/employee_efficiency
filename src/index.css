@@ -1,7 +1,7 @@
-.collapsed-sidebar{
+.collapsed-sidebar {
   top: 50px;
 }
-.expand-sidebar{
+.expand-sidebar {
   /* max-width: calc(100% - 200px);
   min-width: calc(100% - 200px); */
   max-width: 200px !important;
@@ -11,3 +11,6 @@
   z-index: 10;
   top: 0;
 }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
