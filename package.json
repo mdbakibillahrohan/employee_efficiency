@@ -27,7 +27,8 @@
     "react-quill": "^2.0.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.11.1",
-    "react-transition-group": "^4.4.5"
+    "react-transition-group": "^4.4.5",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@redux-devtools/extension": "^3.2.5",
