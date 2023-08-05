@@ -154,7 +154,6 @@ const AddEmployeeEfficiency = () => {
                 <Tabs
                   animated={true}
                   defaultActiveKey={1}
-                  activeKey={tabPosition.toString()}
                   items={[
                     {
                       label: "Employee Info",
