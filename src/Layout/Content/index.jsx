@@ -3,6 +3,8 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import BulletinIndex from "../../pages/Bulletin";
 import BulletinRouteMap from "../../pages/Bulletin/routeMap";
+import EmployeeEfficiencyIndex from "../../pages/EmployeeEfficiency";
+import EmployeeEfficiencyRouteMap from "../../pages/EmployeeEfficiency/routeMap";
 import "./index.css";
 
 const { Content } = Layout;
@@ -32,6 +34,17 @@ const ContentMain = ({ colorBgContainer, collapsed }) => {
         <Routes>
           <Route path="/bulletin" element={<BulletinIndex />}>
             {BulletinRouteMap.map((data, i) => {
+              return (
+                <Route
+                  key={data.path}
+                  path={data.path}
+                  element={data.component}
+                />
+              );
+            })}
+          </Route>
+          <Route path="/efficient" element={<EmployeeEfficiencyIndex />}>
+            {EmployeeEfficiencyRouteMap.map((data, i) => {
               return (
                 <Route
                   key={data.path}

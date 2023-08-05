@@ -30,6 +30,28 @@ const menus = [
     ],
   },
   {
+    Id: 2,
+    ModuleId: 2,
+    ModuleName: "Efficiency",
+    IconName: "fa-solid fa-seedling",
+    children: [
+      {
+        id: 1,
+        MenuId: 1,
+        name: "Add Employee",
+        IconName: "fa-solid fa-plus",
+        path: "efficient/add-employee",
+      },
+      {
+        id: 2,
+        MenuId: 2,
+        name: "List Efficiency",
+        IconName: "fa-solid fa-list-ul",
+        path: "efficient/show-employee",
+      },
+    ],
+  },
+  {
     id: 1,
     MenuId: 1,
     name: "Add Donner",

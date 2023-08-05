@@ -1,11 +1,17 @@
 import loadable from "@loadable/component";
 
-const UploadBulletin = loadable(() => import("./UploadButtelin"));
-const ShowBulletin = loadable(() => import("./ShowBulletin"));
+const AddEmployeeEfficiency = loadable(() => import("./AddEmployeeEfficiency"));
+const ShowEmployeeEfficiency = loadable(() =>
+  import("./ShowEmployeeEfficiency/")
+);
 
 export default [
   {
-    path: "upload",
-    component: <UploadBulletin />,
+    path: "add-employee",
+    component: <AddEmployeeEfficiency />,
+  },
+  {
+    path: "show-employee",
+    component: <ShowEmployeeEfficiency />,
   },
 ];

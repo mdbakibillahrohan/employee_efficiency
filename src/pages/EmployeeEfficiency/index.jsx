@@ -5,8 +5,8 @@ const EmployeeEfficiencyIndex = () => {
   const { pathname } = loaction;
   return (
     <div>
-      {pathname === "/bulletin" ? (
-        <Navigate replace to="/bulletin/upload" />
+      {pathname === "/efficiency" ? (
+        <Navigate replace to="/efficiency/add-employee" />
       ) : (
         ""
       )}
