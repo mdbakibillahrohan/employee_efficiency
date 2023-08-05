@@ -15,6 +15,7 @@ const { TextArea } = Input;
 
 const AddEmployeeEfficiency = () => {
   const [open, setOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("1");
   const [tabPosition, setTabPosition] = useState(1);
   const columns = [
     {
@@ -154,6 +155,10 @@ const AddEmployeeEfficiency = () => {
                 <Tabs
                   animated={true}
                   defaultActiveKey={1}
+                  onChange={(e) => {
+                    setActiveTab(e);
+                  }}
+                  activeKey={activeTab}
                   items={[
                     {
                       label: "Employee Info",
@@ -242,7 +247,7 @@ const AddEmployeeEfficiency = () => {
                     },
                     {
                       label: "Hourly Performance",
-                      key: "3",
+                      key: "2",
                       children: (
                         <>
                           <table
