@@ -9,14 +9,15 @@ import {
   Tabs,
 } from "antd";
 
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
+import { employeeReducer, initialState } from "./store";
 const { Search } = Input;
 const { TextArea } = Input;
 
 const AddEmployeeEfficiency = () => {
+  const [state, localDispatch] = useReducer(employeeReducer, initialState);
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("1");
-  const [tabPosition, setTabPosition] = useState(1);
   const columns = [
     {
       title: "Employee Id",
@@ -101,6 +102,74 @@ const AddEmployeeEfficiency = () => {
     console.log("Failed:", errorInfo);
   };
 
+  const calculateAverageAndTotal = async () => {
+    // here started calculating target quantitiy
+    let targetQuantityTotal = 0;
+    let targetQuantityAverage = 0;
+    let targetQuantity = [...state.targetQuantity];
+
+    targetQuantityAverage = targetQuantityTotal / targetQuantity.length;
+    await localDispatch({
+      type: "TOTAL_AND_AVERAGE_CHANGE",
+      payload: {
+        targetQuantityTotal,
+        targetQuantityAverage,
+      },
+    });
+  };
+
+  const onTargetQuantityChangeHandler = async (e, i) => {
+    const payload = {
+      index: i,
+      value: e.target.value,
+    };
+    localDispatch({
+      type: "EDIT_TARGET_QUANTITY",
+      payload: payload,
+    });
+
+    let targetQuantity = [...state.targetQuantity];
+    const totall = targetQuantity.reduce(
+      (accum, current) => (accum += current),
+      0
+    );
+    // targetQuantity.forEach((targetQuantity) => {
+    //   targetQuantityTotal = targetQuantityTotal + targetQuantity;
+    // });
+    console.log("TTT: ", totall);
+    await calculateAverageAndTotal();
+  };
+  const onProductionQuantityChangeHandler = (e, i) => {
+    const payload = {
+      index: i,
+      value: e.target.value,
+    };
+    localDispatch({
+      type: "EDIT_PRODUCTION_QUANTITY",
+      payload: payload,
+    });
+  };
+  const onCheckQuantityChangeHandler = (e, i) => {
+    const payload = {
+      index: i,
+      value: e.target.value,
+    };
+    localDispatch({
+      type: "EDIT_CHECK_QUANTITY",
+      payload: payload,
+    });
+  };
+  const onDefectQuantityChangeHandler = (e, i) => {
+    const payload = {
+      index: i,
+      value: e.target.value,
+    };
+    localDispatch({
+      type: "EDIT_DEFECT_QUANTITY",
+      payload: payload,
+    });
+  };
+
   return (
     <>
       <div>
@@ -132,6 +201,34 @@ const AddEmployeeEfficiency = () => {
           width={1200}
         >
           <div>
+            <div className="flex justify-end">
+              <Button
+                disabled={activeTab == "1"}
+                className="mx-4"
+                type="primary"
+                onClick={() => {
+                  localDispatch({
+                    type: "ADD_HOUR",
+                    payload: 0,
+                  });
+                }}
+              >
+                Add HOUR
+              </Button>
+              <Button
+                disabled={activeTab == "1"}
+                className="mx-4"
+                type="primary"
+                onClick={() => {
+                  localDispatch({
+                    type: "REMOVE_HOUR",
+                    payload: 0,
+                  });
+                }}
+              >
+                REMOVE HOUR
+              </Button>
+            </div>
             <div className="h-[27rem]">
               <Form
                 name="basic"
@@ -257,315 +354,144 @@ const AddEmployeeEfficiency = () => {
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                               <tr>
                                 <th scope="col">Hours</th>
-                                <th scope="col">H1</th>
-                                <th scope="col">H2</th>
-                                <th scope="col">H3</th>
-                                <th scope="col">H4</th>
-                                <th scope="col">H5</th>
-                                <th scope="col">H6</th>
-                                <th scope="col">H7</th>
-                                <th scope="col">H8</th>
-                                <th scope="col">H9</th>
-                                <th scope="col">H10</th>
+                                {state.hourLists.map((e, i) => {
+                                  return (
+                                    <th key={i} scope="col">
+                                      {e.title}
+                                    </th>
+                                  );
+                                })}
                                 <th scope="col">Total</th>
                                 <th scope="col">Average</th>
                               </tr>
                             </thead>
                             <tbody>
+                              {/* here started the target quantity code  */}
                               <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <th
                                   scope="row"
-                                  class="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                  className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                 >
                                   Target Quantitiy
                                 </th>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
+                                {state.targetQuantity.map((e, i) => {
+                                  return (
+                                    <td key={i} className="p-0 w-16">
+                                      <input
+                                        className="h-11 w-16 text-black text-center border-0"
+                                        type="text"
+                                        onChange={(e) => {
+                                          onTargetQuantityChangeHandler(e, i);
+                                        }}
+                                        name={e.value}
+                                        value={e}
+                                      />
+                                    </td>
+                                  );
+                                })}
+
+                                <td className="bg-lime-600 text-black my-1">
+                                  {state.total.target_quantity}
                                 </td>
                                 <td className="bg-lime-600 text-black my-1">
-                                  120
-                                </td>
-                                <td className="bg-lime-600 text-black my-1">
-                                  120
+                                  {state.average.target_quantity}
                                 </td>
                               </tr>
+                              {/* here ended the target quantity  */}
+
                               <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <th
                                   scope="row"
-                                  class="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                  className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                 >
                                   Production Quantitiy
                                 </th>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
+                                {state.productionQuantity.map((e, i) => {
+                                  return (
+                                    <td key={i} className="p-0 w-16">
+                                      <input
+                                        className="h-11 w-16 text-black text-center border-0"
+                                        type="text"
+                                        name={e.value}
+                                        value={e}
+                                        onChange={(e) => {
+                                          onProductionQuantityChangeHandler(
+                                            e,
+                                            i
+                                          );
+                                        }}
+                                      />
+                                    </td>
+                                  );
+                                })}
+
+                                <td className="bg-lime-600 text-black my-1">
+                                  {state.total.production_quantity}
                                 </td>
                                 <td className="bg-lime-600 text-black my-1">
-                                  120
-                                </td>
-                                <td className="bg-lime-600 text-black my-1">
-                                  120
+                                  {state.average.production_quantity}
                                 </td>
                               </tr>
+
+                              {/* here started the check quantity  */}
                               <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <th
                                   scope="row"
-                                  class="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                  className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                 >
                                   Check Quantitiy
                                 </th>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
+                                {state.checkQuantity.map((e, i) => {
+                                  return (
+                                    <td key={i} className="p-0 w-16">
+                                      <input
+                                        className="h-11 w-16 text-black text-center border-0"
+                                        type="text"
+                                        name={e.value}
+                                        onChange={(e) => {
+                                          onCheckQuantityChangeHandler(e, i);
+                                        }}
+                                        value={e}
+                                      />
+                                    </td>
+                                  );
+                                })}
+                                <td className="bg-lime-600 text-black my-1">
+                                  {state.total.check_quantity}
                                 </td>
                                 <td className="bg-lime-600 text-black my-1">
-                                  120
-                                </td>
-                                <td className="bg-lime-600 text-black my-1">
-                                  120
+                                  {state.average.check_quantity}
                                 </td>
                               </tr>
+                              {/* here ended the check quantity  */}
+
                               <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <th
                                   scope="row"
-                                  class="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                  className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                 >
                                   Defect Quantitiy
                                 </th>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center"
-                                    type="text"
-                                  />
+                                {state.defectQuantity.map((e, i) => {
+                                  return (
+                                    <td key={i} className="p-0 w-16">
+                                      <input
+                                        className="h-11 w-16 text-black text-center border-0"
+                                        type="text"
+                                        name={e.value}
+                                        onChange={(e) => {
+                                          onDefectQuantityChangeHandler(e, i);
+                                        }}
+                                        value={e}
+                                      />
+                                    </td>
+                                  );
+                                })}
+                                <td className="bg-lime-600 text-black my-1">
+                                  {state.total.defect_quantity}
                                 </td>
                                 <td className="bg-lime-600 text-black my-1">
-                                  120
-                                </td>
-                                <td className="bg-lime-600 text-black my-1">
-                                  120
+                                  {state.average.defect_quantity}
                                 </td>
                               </tr>
                               <tr className="bg-yellow-500 border-b dark:bg-gray-800 dark:border-gray-700">
@@ -575,138 +501,40 @@ const AddEmployeeEfficiency = () => {
                                 >
                                   Efficiency(%)
                                 </th>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
+                                {state.efficiency.map((e, i) => {
+                                  return (
+                                    <td key={i} className="p-0 w-16 text-black">
+                                      {e}
+                                    </td>
+                                  );
+                                })}
+                                <td className="text-black my-1">
+                                  {state.total.efficiency}
                                 </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
+                                <td className="text-black my-1">
+                                  {state.average.efficiency}
                                 </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="text-black my-1">120</td>
-                                <td className="text-black my-1">120</td>
                               </tr>
                               <tr className="bg-yellow-500 border-b dark:bg-gray-800 dark:border-gray-700">
                                 <th
                                   scope="row"
-                                  class="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                  className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                 >
                                   Defect(%)
                                 </th>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
+                                {state.defect.map((e, i) => {
+                                  return (
+                                    <td key={i} className="p-0 w-16 text-black">
+                                      {e}
+                                    </td>
+                                  );
+                                })}
+                                <td className="text-black my-1">
+                                  {state.total.defect}
                                 </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
+                                <td className="text-black my-1">
+                                  {state.average.defect}
                                 </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="p-0 w-16">
-                                  <input
-                                    className="border-[0.1rem] h-11 border-gray-950 w-16 text-black text-center bg-transparent"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="text-black my-1">120</td>
-                                <td className="text-black my-1">120</td>
                               </tr>
                             </tbody>
                           </table>
@@ -718,15 +546,21 @@ const AddEmployeeEfficiency = () => {
               </Form>
             </div>
             <div className="flex w-full justify-between">
-              <Button type="primary">Previous</Button>
               <Button
                 onClick={() => {
-                  const newTabposition = tabPosition + 1;
-                  setTabPosition(newTabposition);
-                  console.log("new tab position ", newTabposition);
-                  console.log("tab position ", tabPosition);
+                  setActiveTab("1");
                 }}
                 type="primary"
+                disabled={activeTab == "1"}
+              >
+                Previous
+              </Button>
+              <Button
+                onClick={() => {
+                  setActiveTab("2");
+                }}
+                type="primary"
+                disabled={activeTab == "2"}
               >
                 Next
               </Button>
