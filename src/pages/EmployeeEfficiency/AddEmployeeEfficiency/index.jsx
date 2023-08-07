@@ -18,6 +18,9 @@ const AddEmployeeEfficiency = () => {
   const [state, localDispatch] = useReducer(employeeReducer, initialState);
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("1");
+  // useEffect(() => {
+  //   calculateAverageAndTotal();
+  // }, [state]);
   const columns = [
     {
       title: "Employee Id",
@@ -102,14 +105,16 @@ const AddEmployeeEfficiency = () => {
     console.log("Failed:", errorInfo);
   };
 
-  const calculateAverageAndTotal = async () => {
+  const calculateAverageAndTotal = () => {
     // here started calculating target quantitiy
     let targetQuantityTotal = 0;
     let targetQuantityAverage = 0;
     let targetQuantity = [...state.targetQuantity];
-
+    targetQuantity.forEach((el) => {
+      targetQuantityTotal += el;
+    });
     targetQuantityAverage = targetQuantityTotal / targetQuantity.length;
-    await localDispatch({
+    localDispatch({
       type: "TOTAL_AND_AVERAGE_CHANGE",
       payload: {
         targetQuantityTotal,
@@ -127,17 +132,6 @@ const AddEmployeeEfficiency = () => {
       type: "EDIT_TARGET_QUANTITY",
       payload: payload,
     });
-
-    let targetQuantity = [...state.targetQuantity];
-    const totall = targetQuantity.reduce(
-      (accum, current) => (accum += current),
-      0
-    );
-    // targetQuantity.forEach((targetQuantity) => {
-    //   targetQuantityTotal = targetQuantityTotal + targetQuantity;
-    // });
-    console.log("TTT: ", totall);
-    await calculateAverageAndTotal();
   };
   const onProductionQuantityChangeHandler = (e, i) => {
     const payload = {
@@ -434,7 +428,7 @@ const AddEmployeeEfficiency = () => {
                               </tr>
 
                               {/* here started the check quantity  */}
-                              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                              {/* <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <th
                                   scope="row"
                                   className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -462,10 +456,10 @@ const AddEmployeeEfficiency = () => {
                                 <td className="bg-lime-600 text-black my-1">
                                   {state.average.check_quantity}
                                 </td>
-                              </tr>
+                              </tr> */}
                               {/* here ended the check quantity  */}
 
-                              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                              {/* <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <th
                                   scope="row"
                                   className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -493,7 +487,7 @@ const AddEmployeeEfficiency = () => {
                                 <td className="bg-lime-600 text-black my-1">
                                   {state.average.defect_quantity}
                                 </td>
-                              </tr>
+                              </tr> */}
                               <tr className="bg-yellow-500 border-b dark:bg-gray-800 dark:border-gray-700">
                                 <th
                                   scope="row"
@@ -515,7 +509,7 @@ const AddEmployeeEfficiency = () => {
                                   {state.average.efficiency}
                                 </td>
                               </tr>
-                              <tr className="bg-yellow-500 border-b dark:bg-gray-800 dark:border-gray-700">
+                              {/* <tr className="bg-yellow-500 border-b dark:bg-gray-800 dark:border-gray-700">
                                 <th
                                   scope="row"
                                   className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -535,7 +529,7 @@ const AddEmployeeEfficiency = () => {
                                 <td className="text-black my-1">
                                   {state.average.defect}
                                 </td>
-                              </tr>
+                              </tr> */}
                             </tbody>
                           </table>
                         </>
