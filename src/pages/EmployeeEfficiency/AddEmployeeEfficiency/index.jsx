@@ -10,13 +10,16 @@ import {
 } from "antd";
 
 import React, { useReducer, useState } from "react";
-import { employeeReducer, initialState } from "./store";
+import Calculator from "./Calculator";
+import { employeeReducer, initialState } from "./Calculator/store";
+import GlobalEfficiency from "./GlobalEfficiency";
 const { Search } = Input;
 const { TextArea } = Input;
 
 const AddEmployeeEfficiency = () => {
   const [state, localDispatch] = useReducer(employeeReducer, initialState);
   const [open, setOpen] = useState(false);
+  const [globalEfficiencyOpen, setGlobalEfficiencyOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("1");
   // useEffect(() => {
   //   calculateAverageAndTotal();
@@ -93,6 +96,84 @@ const AddEmployeeEfficiency = () => {
       name: "Mr. Karim",
       designation: "Operator",
     },
+    {
+      key: "5",
+      employee_id: "em004",
+      name: "Mr. Karim",
+      designation: "Operator",
+    },
+    {
+      key: "6",
+      employee_id: "em004",
+      name: "Mr. Karim",
+      designation: "Operator",
+    },
+    {
+      key: "7",
+      employee_id: "em004",
+      name: "Mr. Karim",
+      designation: "Operator",
+    },
+    {
+      key: "8",
+      employee_id: "em004",
+      name: "Mr. Karim",
+      designation: "Operator",
+    },
+    {
+      key: "9",
+      employee_id: "em004",
+      name: "Mr. Karim",
+      designation: "Operator",
+    },
+    {
+      key: "10",
+      employee_id: "em004",
+      name: "Mr. Karim",
+      designation: "Operator",
+    },
+    {
+      key: "11",
+      employee_id: "em004",
+      name: "Mr. Karim",
+      designation: "Operator",
+    },
+    {
+      key: "12",
+      employee_id: "em004",
+      name: "Mr. Karim",
+      designation: "Operator",
+    },
+    {
+      key: "13",
+      employee_id: "em004",
+      name: "Mr. Karim",
+      designation: "Operator",
+    },
+    {
+      key: "14",
+      employee_id: "em004",
+      name: "Mr. Karim",
+      designation: "Operator",
+    },
+    {
+      key: "15",
+      employee_id: "em004",
+      name: "Mr. Karim",
+      designation: "Operator",
+    },
+    {
+      key: "16",
+      employee_id: "em004",
+      name: "Mr. Karim",
+      designation: "Operator",
+    },
+    {
+      key: "17",
+      employee_id: "em004",
+      name: "Mr. Karim",
+      designation: "Operator",
+    },
   ];
 
   const onSearch = (e) => {
@@ -164,6 +245,8 @@ const AddEmployeeEfficiency = () => {
     });
   };
 
+  const onLineChange = () => {};
+
   return (
     <>
       <div>
@@ -171,17 +254,92 @@ const AddEmployeeEfficiency = () => {
           Employee Efficiency
         </h2>
         <div>
-          <div className="flex justify-end w-full">
-            <Search
-              className="my-4"
-              style={{
-                width: 300,
-                background: "#1677ff",
-              }}
-              placeholder="Search by employee id or name"
-              onSearch={onSearch}
-              enterButton
-            />
+          <div className="flex justify-between items-center w-full">
+            <div className="flex">
+              <div className="mx-2">
+                <Select
+                  className="w-36"
+                  showSearch
+                  placeholder="Select a Line"
+                  optionFilterProp="children"
+                  onChange={onLineChange}
+                  onSearch={onSearch}
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  options={[
+                    {
+                      value: "jack",
+                      label: "Jack",
+                    },
+                    {
+                      value: "lucy",
+                      label: "Lucy",
+                    },
+                    {
+                      value: "tom",
+                      label: "Tom",
+                    },
+                  ]}
+                />
+              </div>
+              <div className="mx-2 w-36">
+                <Select
+                  className="w-36"
+                  showSearch
+                  placeholder="Select a bulletin"
+                  optionFilterProp="children"
+                  onChange={onLineChange}
+                  onSearch={onSearch}
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  options={[
+                    {
+                      value: "jack",
+                      label: "Jack",
+                    },
+                    {
+                      value: "lucy",
+                      label: "Lucy",
+                    },
+                    {
+                      value: "tom",
+                      label: "Tom",
+                    },
+                  ]}
+                />
+              </div>
+              <Button className="mx-2" type="primary">
+                Apply for all employee
+              </Button>
+              <Button
+                onClick={() => {
+                  setGlobalEfficiencyOpen(true);
+                }}
+                className="mx-2"
+                type="primary"
+              >
+                Global Efficiency
+              </Button>
+            </div>
+
+            <div>
+              <Search
+                className="my-4"
+                style={{
+                  width: 300,
+                  background: "#1677ff",
+                }}
+                placeholder="Search by employee id or name"
+                onSearch={onSearch}
+                enterButton
+              />
+            </div>
           </div>
           <Table pagination={false} columns={columns} dataSource={data} />
         </div>
@@ -341,197 +499,20 @@ const AddEmployeeEfficiency = () => {
                       key: "2",
                       children: (
                         <>
-                          <table
-                            border={2}
-                            className="w-full text-sm text-center text-gray-500 dark:text-gray-400"
-                          >
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                              <tr>
-                                <th scope="col">Hours</th>
-                                {state.hourLists.map((e, i) => {
-                                  return (
-                                    <th key={i} scope="col">
-                                      {e.title}
-                                    </th>
-                                  );
-                                })}
-                                <th scope="col">Total</th>
-                                <th scope="col">Average</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {/* here started the target quantity code  */}
-                              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th
-                                  scope="row"
-                                  className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                >
-                                  Target Quantitiy
-                                </th>
-                                {state.targetQuantity.map((e, i) => {
-                                  return (
-                                    <td key={i} className="p-0 w-16">
-                                      <input
-                                        className="h-11 w-16 text-black text-center border-0"
-                                        type="text"
-                                        onChange={(e) => {
-                                          onTargetQuantityChangeHandler(e, i);
-                                        }}
-                                        name={e.value}
-                                        value={e}
-                                      />
-                                    </td>
-                                  );
-                                })}
-
-                                <td className="bg-lime-600 text-black my-1">
-                                  {state.total.target_quantity}
-                                </td>
-                                <td className="bg-lime-600 text-black my-1">
-                                  {state.average.target_quantity}
-                                </td>
-                              </tr>
-                              {/* here ended the target quantity  */}
-
-                              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th
-                                  scope="row"
-                                  className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                >
-                                  Production Quantitiy
-                                </th>
-                                {state.productionQuantity.map((e, i) => {
-                                  return (
-                                    <td key={i} className="p-0 w-16">
-                                      <input
-                                        className="h-11 w-16 text-black text-center border-0"
-                                        type="text"
-                                        name={e.value}
-                                        value={e}
-                                        onChange={(e) => {
-                                          onProductionQuantityChangeHandler(
-                                            e,
-                                            i
-                                          );
-                                        }}
-                                      />
-                                    </td>
-                                  );
-                                })}
-
-                                <td className="bg-lime-600 text-black my-1">
-                                  {state.total.production_quantity}
-                                </td>
-                                <td className="bg-lime-600 text-black my-1">
-                                  {state.average.production_quantity}
-                                </td>
-                              </tr>
-
-                              {/* here started the check quantity  */}
-                              {/* <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th
-                                  scope="row"
-                                  className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                >
-                                  Check Quantitiy
-                                </th>
-                                {state.checkQuantity.map((e, i) => {
-                                  return (
-                                    <td key={i} className="p-0 w-16">
-                                      <input
-                                        className="h-11 w-16 text-black text-center border-0"
-                                        type="text"
-                                        name={e.value}
-                                        onChange={(e) => {
-                                          onCheckQuantityChangeHandler(e, i);
-                                        }}
-                                        value={e}
-                                      />
-                                    </td>
-                                  );
-                                })}
-                                <td className="bg-lime-600 text-black my-1">
-                                  {state.total.check_quantity}
-                                </td>
-                                <td className="bg-lime-600 text-black my-1">
-                                  {state.average.check_quantity}
-                                </td>
-                              </tr> */}
-                              {/* here ended the check quantity  */}
-
-                              {/* <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th
-                                  scope="row"
-                                  className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                >
-                                  Defect Quantitiy
-                                </th>
-                                {state.defectQuantity.map((e, i) => {
-                                  return (
-                                    <td key={i} className="p-0 w-16">
-                                      <input
-                                        className="h-11 w-16 text-black text-center border-0"
-                                        type="text"
-                                        name={e.value}
-                                        onChange={(e) => {
-                                          onDefectQuantityChangeHandler(e, i);
-                                        }}
-                                        value={e}
-                                      />
-                                    </td>
-                                  );
-                                })}
-                                <td className="bg-lime-600 text-black my-1">
-                                  {state.total.defect_quantity}
-                                </td>
-                                <td className="bg-lime-600 text-black my-1">
-                                  {state.average.defect_quantity}
-                                </td>
-                              </tr> */}
-                              <tr className="bg-yellow-500 border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th
-                                  scope="row"
-                                  className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                >
-                                  Efficiency(%)
-                                </th>
-                                {state.efficiency.map((e, i) => {
-                                  return (
-                                    <td key={i} className="p-0 w-16 text-black">
-                                      {e}
-                                    </td>
-                                  );
-                                })}
-                                <td className="text-black my-1">
-                                  {state.total.efficiency}
-                                </td>
-                                <td className="text-black my-1">
-                                  {state.average.efficiency}
-                                </td>
-                              </tr>
-                              {/* <tr className="bg-yellow-500 border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th
-                                  scope="row"
-                                  className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                >
-                                  Defect(%)
-                                </th>
-                                {state.defect.map((e, i) => {
-                                  return (
-                                    <td key={i} className="p-0 w-16 text-black">
-                                      {e}
-                                    </td>
-                                  );
-                                })}
-                                <td className="text-black my-1">
-                                  {state.total.defect}
-                                </td>
-                                <td className="text-black my-1">
-                                  {state.average.defect}
-                                </td>
-                              </tr> */}
-                            </tbody>
-                          </table>
+                          <Calculator
+                            onCheckQuantityChangeHandler={
+                              onCheckQuantityChangeHandler
+                            }
+                            onProductionQuantityChangeHandler={
+                              onProductionQuantityChangeHandler
+                            }
+                            onTargetQuantityChangeHandler={
+                              onTargetQuantityChangeHandler
+                            }
+                            onDefectQuantityChangeHandler={
+                              onDefectQuantityChangeHandler
+                            }
+                          />
                         </>
                       ),
                     },
@@ -560,6 +541,16 @@ const AddEmployeeEfficiency = () => {
               </Button>
             </div>
           </div>
+        </Modal>
+        <Modal
+          title="Efficiency Edit"
+          centered
+          open={globalEfficiencyOpen}
+          onOk={() => setGlobalEfficiencyOpen(false)}
+          onCancel={() => setGlobalEfficiencyOpen(false)}
+          width={1400}
+        >
+          <GlobalEfficiency data={data} />
         </Modal>
       </div>
     </>

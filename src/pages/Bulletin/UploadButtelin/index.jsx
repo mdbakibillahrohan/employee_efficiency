@@ -19,13 +19,12 @@ const UploadBulletin = () => {
     reader.onload = (e) => {
       const data = e.target.result;
       const workbook = XLSX.read(data, { type: "binary" });
-      const sheetname = workbook.SheetNames[0];
+      const sheetname = workbook.SheetNames[1];
       const sheet = workbook.Sheets[sheetname];
       const parsedData = XLSX.utils.sheet_to_json(sheet);
       if (parsedData) {
         onSuccess("Ok");
         setPreviewData(parsedData);
-        console.log(parsedData);
       }
     };
   };
@@ -46,13 +45,13 @@ const UploadBulletin = () => {
             uploading company data or other banned files.
           </p>
         </Dragger>
-        <div className="mt-4">
+        <div className="mt-4 overflow-x-auto">
           <span className="text-2xl">Preview: </span>
           {previewData.length > 0 ? (
             <table border={1}>
               <thead>
                 <tr>
-                  {Object.keys(previewData[4]).map((el, index) => {
+                  {Object.values(previewData[1]).map((el, index) => {
                     return <th key={index}>{el}</th>;
                   })}
                 </tr>
@@ -61,7 +60,7 @@ const UploadBulletin = () => {
                 {previewData.map((data, index) => {
                   return (
                     <tr key={index}>
-                      {Object.keys(previewData[0]).map((el, index) => {
+                      {Object.keys(previewData[1]).map((el, index) => {
                         return <td key={index}>{data[el]}</td>;
                       })}
                     </tr>
